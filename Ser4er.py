@@ -12,11 +12,11 @@ screen.iconbitmap("sys\\icons\\icon.ico")
 color_1="black"
 color_2="white"
 screen["bg"]=color_2
-file = None
+file = "eng"
 
 def search():
     text.delete(1.0, END)
-    word = ent.get().lower()
+    word = ent.get().lower().strip()
     with open(f"data\\words\\words_{file}.txt","r",encoding="utf-8") as f:
         data = f.readlines()
     answer=""
