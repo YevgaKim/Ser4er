@@ -5,7 +5,6 @@ from docx import Document
 
 def get_eng(file_name:str):
     document = Document(file_name)
-    df_tables = []
     for table in document.tables:
         df = [['' for i in range(len(table.columns))] for j in range(len(table.rows))]
         for i, row in enumerate(table.rows):

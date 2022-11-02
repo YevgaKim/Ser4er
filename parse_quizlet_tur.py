@@ -6,7 +6,7 @@ from selenium import webdriver
 
 def get_tur():
     driver = webdriver.Chrome(
-            executable_path="C:\\Users\\ЯкименкоЄвгенійСергі\\source\\repos\\Ser4er\\sys\\chromedriver",
+            executable_path="sys\\chromedriver",
         )
     try:
         

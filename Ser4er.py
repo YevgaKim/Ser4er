@@ -1,11 +1,10 @@
+from functools import partial
 from tkinter import *
 from tkinter import filedialog as fd
 from tkinter import messagebox as mb
 
-from PIL import Image, ImageTk
-
-from sys.parse_quizlet_tur import get_tur
-from sys.parse_word_eng import get_eng
+from parse_quizlet_tur import get_tur
+from parse_word_eng import get_eng
 
 screen = Tk()
 
@@ -17,7 +16,7 @@ screen.iconbitmap("sys\\icons\\icon.ico")
 color_1="black"
 color_2="white"
 screen["bg"]=color_2
-file = ""
+FILE = ""
 
 def parse_tur():
     mb.showinfo(
@@ -51,23 +50,24 @@ def parse_eng():
         message="Parsing finished")
 
 
-def search():
+def search(ev):
     if var.get() == 0:
-        file="eng"
+        FILE="eng"
     elif var.get() == 1:
-        file = 'tur'
+        FILE = 'tur'
     text.delete(1.0, END)
     word = ent.get().lower().strip()
-    with open(f"data\\words\\words_{file}.txt","r",encoding="utf-8") as f:
+    with open(f"data\\words\\words_{FILE}.txt","r",encoding="utf-8") as f:
         data = f.readlines()
     answer=""
     for i in data:
         if word in i:
-            answer+=f"{i}\n"
+            answer+=f"{i}==============================\n"
     if answer=="":
-        answer="No result"
+        answer="---------------------No result---------------------"
 
     text.insert(1.0,answer)
+
 
 ent = Entry(screen,
     justify="center",font="20",bg=color_2,fg=color_1)
@@ -82,25 +82,25 @@ scroll.place(width=15,height=260,x=285,y=80)
 
 text.config(yscrollcommand=scroll.set)
 
-
+search_2 = partial(search,"")
 b_search = Button(text="Search",
     fg=color_1,
     bg=color_2,
     activebackground=color_1,
     activeforeground=color_2,
-    command=search,
+    command=search_2,
     )
 b_search.place(width = 80,height=25 ,x=110,y=40)
 
 var = IntVar()
 var.set(0)
 eng = Radiobutton(text="English",
-                  variable=var, value=0
-                  ,bg=color_2)
+                variable=var, value=0
+                ,bg=color_2)
 
 tur = Radiobutton(text="Turkish",
-                  variable=var, value=1
-                  ,bg=color_2)
+                variable=var, value=1
+                ,bg=color_2)
 
 eng.place(x=30,y=40)
 tur.place(x=210,y=40)
@@ -111,10 +111,17 @@ screen.config(menu=mainmenu)
 filemenu = Menu(mainmenu, tearoff=0)
 filemenu.add_command(label="Turkish",command=parse_tur)
 filemenu.add_command(label="English", command=parse_eng)
- 
+
 mainmenu.add_cascade(label="Parse",
-                     menu=filemenu)
+                    menu=filemenu)
 
+screen.bind('<Return>', search)
+keyboard= ["q","w","e","r","t","y","u","i","o","p",
+            "a","s","d","f","g","h","j","k","l",
+            "z","x","c","v","b","n","m"]
+for i in keyboard:
+    screen.bind(i,search)
 
+screen.bind('<BackSpace>', search)
 
 screen.mainloop()
