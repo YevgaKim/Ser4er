@@ -4,17 +4,17 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 
 
-def get_tur():
+def get_tur_or_eng(lan:str,file:str):
     driver = webdriver.Chrome(
             executable_path="sys\\chromedriver",
         )
     try:
         
         driver.get(url="https://quizlet.com")
-        time.sleep(80)
+        time.sleep(60)
 
-        with open("sys\\index.html", "w",encoding="utf-8") as file:
-            file.write(driver.page_source)
+        with open("sys\\index.html", "w",encoding="utf-8") as f:
+            f.write(driver.page_source)
 
     except Exception as ex:
         print(ex)
@@ -24,10 +24,13 @@ def get_tur():
 
     with open("sys\\index.html","r",encoding="utf-8") as f:
         src = f.read()
+    if lan=="en":
+        with open(f"data\\words\\words_{file}.txt","a",encoding="utf-8") as f:
+            f.write(f"\n")
 
     soup = BeautifulSoup(src,"lxml")
 
-    words_tur= soup.findAll("span",class_="TermText notranslate lang-tr")
+    words_tur= soup.findAll("span",class_=f"TermText notranslate lang-{lan}")
     tur=[]
     for i in words_tur:
         word=i.text
@@ -40,7 +43,7 @@ def get_tur():
         ukr.append(word)
 
     for i in range(len(tur)):
-        with open("data\\words\\words_tur.txt","a",encoding="utf-8") as f:
+        with open(f"data\\words\\words_{file}.txt","a",encoding="utf-8") as f:
             f.write(f"{tur[i].lower()} - {ukr[i].lower()}\n")
 
 if __name__=="__main__":
