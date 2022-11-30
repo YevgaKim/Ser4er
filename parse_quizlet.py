@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 
 
-def get_tur_or_eng(lan:str,file:str):
+def get_tur_or_eng_or_ar(lan:str,file:str):
     driver = webdriver.Chrome(
             executable_path="sys\\chromedriver",
         )
